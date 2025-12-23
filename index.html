@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Notre rencontre poétique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: "Cormorant Garamond", serif;
+    color: #f0e6f6;
+    position: relative;
+  }
+
+  #particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    width: 800px;
+    max-width: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+  }
+
+  .container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ff7eb3, #7ea8ff, #65ffce);
+    border-radius: 24px 24px 0 0;
+  }
+
+  .title {
+    font-family: "Dancing Script", cursive;
+    font-size: 3.2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #fff;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(90deg, #ff7eb3, #a18cd1, #7ea8ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    padding-bottom: 15px;
+  }
+
+  .title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #ff7eb3, #a18cd1, #7ea8ff, transparent);
+    border-radius: 3px;
+  }
+
+  #scene {
+    image-rendering: pixelated;
+    border-radius: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    background: rgba(10, 8, 41, 0.6);
+    margin: 15px 0;
+    transition: transform 0.5s ease;
+  }
+
+  #scene:hover {
+    transform: scale(1.01);
+  }
+
+  #speechBubble {
+    position: relative;
+    max-width: 680px;
+    width: 100%;
+    padding: 24px 28px;
+    background: rgba(255, 247, 251, 0.95);
+    border: none;
+    border-radius: 20px;
+    font-size: 1.3rem;
+    font-family: "Playfair Display", serif;
+    color: #4a3c5e;
+    box-shadow: 
+      0 12px 24px rgba(0, 0, 0, 0.2),
+      inset 0 2px 4px rgba(255, 255, 255, 0.8);
+    display: none;
+    text-align: center;
+    line-height: 1.6;
+    transition: all 0.4s ease;
+    margin: 20px 0;
+    z-index: 10;
+    border-left: 6px solid #a18cd1;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  #speechBubble.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #speechBubble::before {
+    content: "\f10d";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    top: -15px;
+    left: 30px;
+    background: #a18cd1;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  #nextBtn {
+    position: relative;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #a18cd1, #7ea8ff);
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    display: none;
+    box-shadow: 
+      0 8px 20px rgba(126, 168, 255, 0.4),
+      inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    margin-top: 15px;
+    overflow: hidden;
+    z-index: 10;
+    letter-spacing: 0.5px;
+  }
+
+  #nextBtn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.7s ease;
+  }
+
+  #nextBtn:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+      0 12px 25px rgba(126, 168, 255, 0.5),
+      inset 0 2px 4px rgba(255, 255, 255, 0.4);
+  }
+
+  #nextBtn:hover::before {
+    left: 100%;
+  }
+
+  #nextBtn:active {
+    transform: translateY(0);
+  }
+
+  .story-counter {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 20px;
+    text-align: center;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .floating-heart {
+    position: absolute;
+    font-size: 1.5rem;
+    color: #ff7eb3;
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .container {
+    animation: fadeInUp 1.2s ease-out forwards;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.8; }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 20px 15px;
+    }
+    
+    .title {
+      font-size: 2.5rem;
+    }
+    
+    #scene {
+      width: 100%;
+      height: auto;
+    }
+    
+    #speechBubble {
+      padding: 18px 22px;
+      font-size: 1.1rem;
+    }
+    
+    #nextBtn {
+      padding: 12px 28px;
+      font-size: 1rem;
+    }
+  }
+</style>
+</head>
+
+<body>
+<div id="particles-js"></div>
+
+<div class="container">
+  <h1 class="title">Joyeux Noël, Rayan</h1>
+  
+  <canvas id="scene" width="700" height="400"></canvas>
+  
+  <div id="speechBubble"></div>
+  
+  <button id="nextBtn">
+    <i class="fas fa-arrow-right" style="margin-left: 8px;"></i> Suivant
+  </button>
+  
+  <div class="story-counter">
+    <span id="currentPage">1</span> / <span id="totalPages">70</span>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  particlesJS("particles-js", {
+    particles: {
+      number: { value: 80, density: { enable: true, value_area: 800 } },
+      color: { value: "#ffffff" },
+      shape: { type: "circle" },
+      opacity: { value: 0.3, random: true },
+      size: { value: 3, random: true },
+      line_linked: {
+        enable: true,
+        distance: 150,
+        color: "#a18cd1",
+        opacity: 0.2,
+        width: 1
+      },
+      move: {
+        enable: true,
+        speed: 1,
+        direction: "none",
+        random: true,
+        straight: false,
+        out_mode: "out",
+        bounce: false
+      }
+    },
+    interactivity: {
+      detect_on: "canvas",
+      events: {
+        onhover: { enable: true, mode: "repulse" },
+        onclick: { enable: true, mode: "push" }
+      }
+    },
+    retina_detect: true
+  });
+});
+
+const canvas = document.getElementById("scene");
+const ctx = canvas.getContext("2d");
+ctx.imageSmoothingEnabled = false;
+
+const bubble = document.getElementById("speechBubble");
+const nextBtn = document.getElementById("nextBtn");
+const currentPageEl = document.getElementById("currentPage");
+const totalPagesEl = document.getElementById("totalPages");
+
+// Images temporaires
+const knightImg = new Image();
+knightImg.src = "knight.png";
+
+const princessImg = new Image();
+princessImg.src = "princess.png";
+
+totalPagesEl.textContent = "70";
+
+const knight = { x: 50, y: 250, step: 0 };
+const princess = { x: 550, y: 250, step: 0 };
+
+let storyIndex = 0;
+
+const storyTexts = [
+  "Tout a commencé ce 4 juillet…",
+  "Un jour qui semblait banal, mais qui, en réalité, était comme un souffle léger sur mon cœur,",
+  "apportant avec lui la promesse d’un moment unique et précieux.",
+  "Je me souviens de nos chemins qui se sont croisés,",
+  "comme deux étoiles hésitant avant de s’unir dans le ciel de l’été.",
+  "Rayan, dès nos premiers mots échangés, j’ai senti un écho doux et singulier,",
+  "un lien fragile mais lumineux qui s’installait doucement entre nous.",
+  "Ton sourire, tes attentions, cette façon que tu as de t’intéresser à moi…",
+  "c’était comme découvrir un jardin secret que je n’avais jamais osé explorer.",
+  "Nous avons appris à nous connaître, chacun à notre rythme,",
+  "comme deux rivières qui s’approchent lentement avant de se rejoindre.",
+  "Et pourtant, malgré la prudence et les silences, une évidence était là :",
+  "nous étions faits pour partager quelque chose de beau ensemble.",
+  "Petit à petit, nos conversations se sont intensifiées,",
+  "et nos cœurs ont commencé à se parler, même sans mots.",
+  "Chaque sourire échangé, chaque regard volé,",
+  "chaque message reçu devenait un fil d’or invisible,",
+  "tissant doucement notre lien précieux.",
+  "Rayan, nous avons commencé à flirter doucement,",
+  "avec cette légèreté qui fait danser les feuilles au vent.",
+  "Mais derrière chaque mot léger, il y avait déjà une profondeur,",
+  "une envie de partager nos rêves, nos espoirs, nos imaginaires câlins.",
+  "Rapidement, j’ai compris que notre attachement grandissait,",
+  "que chaque message, chaque pensée échangée",
+  "était comme une pierre précieuse ajoutée à l’édifice de notre complicité naissante.",
+  "Progressivement, nous avons commencé à être de plus en plus possessifs l’un envers l’autre,",
+  "comme si nos cœurs réclamaient leur place,",
+  "et je me surprenais à t’appeler 'mon homme', Rayan,",
+  "un mot doux que je n’aurais jamais osé prononcer avant.",
+  "Je me surprends à imaginer tes bras autour de moi,",
+  "à rêver de sentir ta chaleur, même à travers la distance.",
+  "Chaque message devient un écho tendre de ce que nos cœurs voudraient se dire,",
+  "et je me laisse emporter par nos imaginaires câlins, Rayan,",
+  "ces instants que seuls nos pensées connaissent.",
+  "Rayan, je te remercie de m’avoir permis de découvrir ce sentiment si étrange et merveilleux :",
+  "la douceur d’être attachée à quelqu’un, vraiment, pour la première fois.",
+  "C’est comme un vent léger qui souffle sur mon cœur,",
+  "apportant avec lui la chaleur d’une flamme inconnue.",
+  "Être attachée à toi, c’est tenir un fil d’or invisible,",
+  "qui vibre à chaque message, à chaque pensée échangée,",
+  "un fil fragile mais solide, précieux et lumineux, qui me relie à toi.",
+  "C’est comme si mes émotions avaient trouvé un miroir,",
+  "un endroit sûr pour se refléter et s’épanouir.",
+  "À travers ce lien, je découvre que la tendresse, la confiance et l’amour",
+  "peuvent exister pleinement, même à distance, même dans nos imaginaires câlins.",
+  "Je suis heureuse de tout ce que tu me permets de découvrir, Rayan,",
+  "de la personne que je deviens à tes côtés,",
+  "plus douce, plus courageuse, plus confiante,",
+  "mais surtout, plus moi-même, entièrement, avec toi.",
+  "Nous avons toujours su prendre notre temps,",
+  "mais aussi nous autoriser à aller plus loin ensemble,",
+  "à rêver à un avenir où nos vies seraient entremêlées,",
+  "où nos cœurs battraient au même rythme, en confiance et en douceur.",
+  "Je me souviens des moments où nous avons ri aux éclats,",
+  "des silences partagés à travers nos messages,",
+  "des conversations profondes qui nous ont rapprochés encore davantage.",
+  "Ton incroyable patience, ta gentillesse, ton écoute attentive…",
+  "tout cela m’a fait sentir que je pouvais être moi-même, entièrement,",
+  "sans crainte, sans masque, simplement avec toi, Rayan.",
+  "Rayan, je ne cesse de penser à toi depuis ce jour,",
+  "chaque instant de ma journée est traversé par ton image,",
+  "comme une douce mélodie qui accompagne mes pensées.",
+  "Tu fais partie de moi, de mes rêves, de mes silences,",
+  "comme un souffle tendre qui ne me quitte jamais.",
+  "Chaque message échangé, chaque mot reçu,",
+  "résonne dans mon cœur comme un écho précieux,",
+  "et je me surprends à sourire sans raison, simplement en pensant à toi.",
+  "Merci d’être cette personne incroyable qui me fait sentir si spéciale,",
+  "si comprise, si aimée.",
+  "Et maintenant, je veux te dire merci, Rayan.",
+  "merci pour tous les instants depuis notre rencontre.",
+  "Merci de m’avoir montré que l’amour peut être à la fois doux et puissant,",
+  "que l’on peut avancer doucement mais sûrement.",
+  "Je suis heureuse de chaque moment passé à tes côtés,",
+  "et impatiente de découvrir tout ce que l’avenir nous réserve.",
+  "Merci d'exister dans ma vie, Rayan."
+];
+
+function advanceCharacters() {
+  knight.x += 2;
+  
+  princess.x -= 2;
+  
+  if (storyIndex % 10 === 0 && storyIndex > 0) {
+    createFloatingHeart();
+  }
+  
+  if (storyIndex === storyTexts.length - 1) {
+    for (let i = 0; i < 20; i++) {
+      setTimeout(createFloatingHeart, i * 150);
+    }
+  }
+}
+
+function createFloatingHeart() {
+  const heart = document.createElement('div');
+  heart.className = 'floating-heart';
+  heart.innerHTML = '<i class="fas fa-heart"></i>';
+  
+  const heartX = (knight.x + princess.x) / 2 + 50;
+  
+  heart.style.left = (heartX / canvas.width * 100) + '%';
+  heart.style.top = '60%';
+  heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+  heart.style.color = `hsl(${Math.random() * 30 + 330}, 100%, 70%)`;
+  document.body.appendChild(heart);
+  
+  const duration = Math.random() * 2 + 2;
+  const animation = heart.animate([
+    { top: '60%', opacity: 0, transform: 'scale(0)' },
+    { top: '30%', opacity: 0.9, transform: 'scale(1.2)' },
+    { top: '0%', opacity: 0, transform: 'scale(0.5)' }
+  ], {
+    duration: duration * 1000,
+    easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+  });
+  
+  animation.onfinish = () => heart.remove();
+}
+
+function typeText(text, callback) {
+  let i = 0;
+  bubble.textContent = "";
+  bubble.classList.remove("show");
+  bubble.style.display = "block";
+  
+  currentPageEl.textContent = (storyIndex + 1).toString();
+  
+  setTimeout(() => {
+    bubble.classList.add("show");
+    
+    const interval = setInterval(() => {
+      bubble.textContent += text[i];
+      i++;
+      if (i >= text.length) {
+        clearInterval(interval);
+        nextBtn.style.display = "block";
+        if (callback) callback();
+      }
+    }, 35);
+  }, 300);
+}
+
+nextBtn.addEventListener("click", () => {
+  nextBtn.style.display = "none";
+  bubble.classList.remove("show");
+  
+  setTimeout(() => {
+    storyIndex++;
+    if (storyIndex < storyTexts.length) {
+      typeText(storyTexts[storyIndex]);
+      advanceCharacters();
+    } else {
+      bubble.textContent = "Fin de notre histoire... pour l'instant ";
+      bubble.classList.add("show");
+      nextBtn.style.display = "none";
+      
+      advanceCharacters();
+    }
+  }, 300);
+});
+
+let clouds = [
+  {x: 50, y:50, w:80, h:40, speed: 0.2},
+  {x: 250, y:30, w:60, h:30, speed: 0.15},
+  {x: 450, y:60, w:70, h:35, speed: 0.25},
+  {x: 600, y:40, w:90, h:45, speed: 0.18}
+];
+
+function drawEnvironment() {
+  let gradient = ctx.createLinearGradient(0, 0, 0, 220);
+  gradient.addColorStop(0, "#0a1a2a");
+  gradient.addColorStop(1, "#1a2b3a");
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, 220);
+  
+  ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+  for (let i = 0; i < 20; i++) {
+    const x = (i * 37) % canvas.width;
+    const y = (i * 19) % 120 + 20;
+    const size = Math.sin(Date.now() / 1000 + i) * 1.5 + 1.5;
+    ctx.beginPath();
+    ctx.arc(x, y, size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  
+  clouds.forEach(cloud => {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+    ctx.beginPath();
+    ctx.ellipse(cloud.x + 3, cloud.y + 3, cloud.w, cloud.h, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.ellipse(cloud.x, cloud.y, cloud.w, cloud.h, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    cloud.x += cloud.speed;
+    if (cloud.x - cloud.w > canvas.width) cloud.x = -cloud.w;
+  });
+  
+  let grassGradient = ctx.createLinearGradient(0, 220, 0, 360);
+  grassGradient.addColorStop(0, "#2a5c2a");
+  grassGradient.addColorStop(1, "#1a3a1a");
+  ctx.fillStyle = grassGradient;
+  ctx.fillRect(0, 220, canvas.width, 180);
+  
+  ctx.fillStyle = "#ff7eb3";
+  for (let i = 0; i < 8; i++) {
+    const x = (i * 90) % canvas.width + 20;
+    const y = 300;
+    ctx.beginPath();
+    ctx.arc(x, y, 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x + 5, y - 3, 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x - 5, y - 3, 2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawCharacters() {
+  ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+  ctx.fillRect(knight.x + 5, knight.y + 105, 90, 10);
+  ctx.fillRect(princess.x + 5, princess.y + 105, 90, 10);
+  
+  const knightOffsetY = Math.sin(knight.step) * 3;
+  const princessOffsetY = Math.sin(princess.step) * 3;
+  
+  if (knightImg.complete && knightImg.naturalHeight !== 0) {
+    ctx.drawImage(knightImg, knight.x, knight.y + knightOffsetY, 100, 100);
+  } else {
+    ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+    ctx.fillRect(knight.x, knight.y, 100, 100);
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+    ctx.strokeRect(knight.x, knight.y, 100, 100);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+    ctx.font = "12px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("Chevalier", knight.x + 50, knight.y + 55);
+  }
+  
+  if (princessImg.complete && princessImg.naturalHeight !== 0) {
+    ctx.drawImage(princessImg, princess.x, princess.y + princessOffsetY, 100, 100);
+  } else {
+    // Placeholder temporaire
+    ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+    ctx.fillRect(princess.x, princess.y, 100, 100);
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+    ctx.strokeRect(princess.x, princess.y, 100, 100);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+    ctx.font = "12px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("Princesse", princess.x + 50, princess.y + 55);
+  }
+  
+  const distance = Math.abs(princess.x - knight.x);
+  if (distance < 200) {
+    const heartX = (knight.x + princess.x) / 2 + 50;
+    const heartY = knight.y + 30;
+    
+    const pulseSize = 1 + Math.sin(Date.now() / 300) * 0.2;
+    
+    ctx.fillStyle = "#ff7eb3";
+    ctx.beginPath();
+    ctx.arc(heartX - 8 * pulseSize, heartY, 8 * pulseSize, 0, Math.PI * 2);
+    ctx.arc(heartX + 8 * pulseSize, heartY, 8 * pulseSize, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.moveTo(heartX - 16 * pulseSize, heartY);
+    ctx.quadraticCurveTo(heartX - 8 * pulseSize, heartY - 16 * pulseSize, heartX, heartY + 8 * pulseSize);
+    ctx.quadraticCurveTo(heartX + 8 * pulseSize, heartY - 16 * pulseSize, heartX + 16 * pulseSize, heartY);
+    ctx.quadraticCurveTo(heartX, heartY + 20 * pulseSize, heartX - 16 * pulseSize, heartY);
+    ctx.fill();
+  }
+  
+  knight.step += 0.1;
+  princess.step += 0.1;
+}
+
+function loop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawEnvironment();
+  drawCharacters();
+  requestAnimationFrame(loop);
+}
+
+loop();
+
+setTimeout(() => {
+  typeText(storyTexts[storyIndex]);
+}, 1000);
+</script>
+</body>
+</html>
