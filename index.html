@@ -377,7 +377,7 @@ const storyTexts = [
   "Rayan, nous avons commencé à flirter doucement,",
   "avec cette légèreté qui fait danser les feuilles au vent.",
   "Mais derrière chaque mot léger, il y avait déjà une profondeur,",
-  "une envie de partager nos rêves, nos espoirs, nos imaginaires câlins.",
+  "une envie de partager nos rêves, nos espoirs, nos attentions.",
   "Rapidement, j’ai compris que notre attachement grandissait,",
   "que chaque message, chaque pensée échangée",
   "était comme une pierre précieuse ajoutée à l’édifice de notre complicité naissante.",
@@ -400,7 +400,7 @@ const storyTexts = [
   "C’est comme si mes émotions avaient trouvé un miroir,",
   "un endroit sûr pour se refléter et s’épanouir.",
   "À travers ce lien, je découvre que la tendresse, la confiance et l’amour",
-  "peuvent exister pleinement, même à distance, même dans nos imaginaires câlins.",
+  "peuvent exister pleinement, même à distance.",
   "Je suis heureuse de tout ce que tu me permets de découvrir, Rayan,",
   "de la personne que je deviens à tes côtés,",
   "plus douce, plus courageuse, plus confiante,",
@@ -507,11 +507,7 @@ nextBtn.addEventListener("click", () => {
     if (storyIndex < storyTexts.length) {
       typeText(storyTexts[storyIndex]);
       advanceCharacters();
-    } else {
-      bubble.textContent = "Fin de notre histoire... pour l'instant ";
-      bubble.classList.add("show");
-      nextBtn.style.display = "none";
-      
+    } else {      
       advanceCharacters();
     }
   }, 300);
